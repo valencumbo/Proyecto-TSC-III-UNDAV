@@ -1,0 +1,31 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isValidId(id) { 
+      return id is string && id.size() <= 128; 
+    }
+    
+    function isValidSurveyResponse(data) {
+      return data.keys().hasAll(['bornInArgentina', 'createdAt']) &&
+             data.bornInArgentina is string &&
+             data.createdAt is timestamp;
+    }
+
+    // Survey Responses
+    match /responses/{responseId} {
+      // Allow anyone with the link to create a response (Public survey)
+      allow create: if isValidSurveyResponse(request.resource.data);
+      
+      // Prevent reading or modifying existing responses from the client for security
+      allow read, update, delete: if false;
+    }
+  }
+}

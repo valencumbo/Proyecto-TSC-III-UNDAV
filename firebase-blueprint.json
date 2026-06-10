@@ -1,0 +1,38 @@
+{
+  "entities": {
+    "SurveyResponse": {
+      "title": "Survey Response",
+      "description": "Represents a single survey response collected in the street.",
+      "type": "object",
+      "properties": {
+        "intervieweeName": { "type": "string" },
+        "bornInArgentina": { "type": "string" },
+        "bornInArgentinaExtra": { "type": "string" },
+        "countryOfOrigin": { "type": "string" },
+        "familyMigrated": { "type": "string" },
+        "familyMigratedExtra": { "type": "string" },
+        "difficultiesLivingAbroad": { "type": "string" },
+        "difficultiesLivingAbroadExtra": { "type": "string" },
+        "equalOpportunities": { "type": "string" },
+        "equalOpportunitiesExtra": { "type": "string" },
+        "stateMeasures": { "type": "string" },
+        "stateMeasuresExtra": { "type": "string" },
+        "immigrantTaboo": { "type": "string" },
+        "immigrantTabooExtra": { "type": "string" },
+        "needVisibility": { "type": "string" },
+        "needVisibilityExtra": { "type": "string" },
+        "plansToMigrate": { "type": "string" },
+        "plansToMigrateExtra": { "type": "string" },
+        "interviewerName": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["bornInArgentina", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/responses/{responseId}": {
+      "schema": "SurveyResponse",
+      "description": "The collection of survey responses."
+    }
+  }
+}
