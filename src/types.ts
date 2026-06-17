@@ -8,16 +8,10 @@ export interface SurveyResponse {
   familyMigratedExtra?: string;
   difficultiesLivingAbroad: string;
   difficultiesLivingAbroadExtra?: string;
-  equalOpportunities: string;
-  equalOpportunitiesExtra?: string;
   stateMeasures: string;
   stateMeasuresExtra?: string;
-  immigrantTaboo: string;
-  immigrantTabooExtra?: string;
   needVisibility: string;
   needVisibilityExtra?: string;
-  plansToMigrate: string;
-  plansToMigrateExtra?: string;
   interviewerName?: string;
   createdAt?: any;
 }

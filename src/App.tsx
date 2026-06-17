@@ -3,19 +3,13 @@ import { motion } from 'motion/react';
 import { 
   Users, 
   MapPin, 
-  Clock, 
   AlertCircle, 
   Heart, 
-  HelpCircle, 
   Send, 
   CheckCircle2,
-  ShieldCheck,
   User,
-  Globe2,
   Handshake,
-  MessageCircle,
-  Eye,
-  Plane
+  Eye
 } from 'lucide-react';
 import { 
   collection, 
@@ -46,16 +40,10 @@ export default function App() {
     familyMigratedExtra: '',
     difficultiesLivingAbroad: '',
     difficultiesLivingAbroadExtra: '',
-    equalOpportunities: '',
-    equalOpportunitiesExtra: '',
     stateMeasures: '',
     stateMeasuresExtra: '',
-    immigrantTaboo: '',
-    immigrantTabooExtra: '',
     needVisibility: '',
     needVisibilityExtra: '',
-    plansToMigrate: '',
-    plansToMigrateExtra: '',
     interviewerName: ''
   });
 
@@ -94,16 +82,10 @@ export default function App() {
       familyMigratedExtra: '',
       difficultiesLivingAbroad: '',
       difficultiesLivingAbroadExtra: '',
-      equalOpportunities: '',
-      equalOpportunitiesExtra: '',
       stateMeasures: '',
       stateMeasuresExtra: '',
-      immigrantTaboo: '',
-      immigrantTabooExtra: '',
       needVisibility: '',
       needVisibilityExtra: '',
-      plansToMigrate: '',
-      plansToMigrateExtra: '',
       interviewerName: ''
     });
     setIsSubmitted(false);
@@ -139,21 +121,25 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen pb-20">
+    <div className="min-h-screen pb-20 relative">
+      {/* Background decorations */}
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-100/50 blur-[120px] mix-blend-multiply pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-rose-100/50 blur-[120px] mix-blend-multiply pointer-events-none" />
+      
       {/* Header */}
-      <header className="bg-white border-b border-[#e0e0d5] py-4 px-4 sticky top-0 z-50">
+      <header className="bg-white/70 backdrop-blur-lg border-b border-white/50 py-4 px-4 sticky top-0 z-50 shadow-sm">
         <div className="max-w-xl mx-auto flex items-center justify-between gap-4">
           <div className="flex-1 flex justify-start">
             <div className="w-16 h-16 items-center justify-center flex overflow-hidden">
-              <img src={redLogo} alt="Logo Red" className="max-w-full max-h-full object-contain" referrerPolicy="no-referrer" onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')} />
+              <img src={redLogo} alt="Logo Red" className="max-w-full max-h-full object-contain drop-shadow-sm" referrerPolicy="no-referrer" onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')} />
             </div>
           </div>
           <div className="flex-[3] text-center">
-            <h1 className="text-xl font-bold font-serif leading-tight">Red de Migrantes y Refugiadxs x UNDAV</h1>
+            <h1 className="text-xl font-bold font-serif leading-tight bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600">Red de Migrantes y Refugiadxs UNDAV</h1>
           </div>
           <div className="flex-1 flex justify-end">
             <div className="w-16 h-16 items-center justify-center flex overflow-hidden">
-              <img src={undavLogo} alt="Logo UNDAV" className="max-w-full max-h-full object-contain" referrerPolicy="no-referrer" onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')} />
+              <img src={undavLogo} alt="Logo UNDAV" className="max-w-full max-h-full object-contain drop-shadow-sm" referrerPolicy="no-referrer" onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')} />
             </div>
           </div>
         </div>
@@ -252,7 +238,7 @@ export default function App() {
             {/* Q2: Family migrated */}
             <div className="space-y-3">
               <label className="form-label flex items-center gap-2">
-                <Users className="w-4 h-4 text-orange-500" /> 2. ¿Tenés familiares o conocidos cercanos que hayan migrado a otro país?
+                <Users className="w-4 h-4 text-orange-500" /> 2. ¿Tenés familiares o conocidos cercanos que hayan inmigrado de otro país a argentina? ¿De dónde?
               </label>
               <div className="grid grid-cols-2 gap-3">
                 {YES_NO.map((val) => (
@@ -282,7 +268,7 @@ export default function App() {
             {/* Q3: Difficulties */}
             <div className="space-y-3">
               <label className="form-label flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 text-purple-500" /> 3. ¿Crees que son muchas las dificultades de vivir en un país extranjero?
+                <AlertCircle className="w-4 h-4 text-purple-500" /> 3. ¿Crees que son muchas las dificultades de vivir en argentina como extranjero?
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {YES_NO_UNSURE.map((val) => (
@@ -309,40 +295,10 @@ export default function App() {
               />
             </div>
 
-            {/* Q4: Equal opportunities */}
+            {/* Q4: State measures */}
             <div className="space-y-3">
               <label className="form-label flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-green-600" /> 4. En cuanto a calidad de vida, ¿pensás que los migrantes tienen las mismas posibilidades que los nacidos en Argentina?
-              </label>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                {YES_NO_UNSURE.map((val) => (
-                  <button
-                    key={val}
-                    type="button"
-                    onClick={() => setFormData({ ...formData, equalOpportunities: val })}
-                    className={cn(
-                      "px-3 py-3 rounded-xl text-sm font-sans font-medium transition-all border",
-                      formData.equalOpportunities === val 
-                        ? "bg-green-600 text-white border-green-600 shadow-md shadow-green-500/20" 
-                        : "bg-white text-gray-700 border-gray-200 hover:border-gray-400"
-                    )}
-                  >
-                    {val}
-                  </button>
-                ))}
-              </div>
-              <textarea
-                className="form-input text-sm mt-2 resize-none h-20 placeholder:text-gray-400"
-                placeholder="Información adicional (opcional)"
-                value={formData.equalOpportunitiesExtra}
-                onChange={(e) => setFormData({ ...formData, equalOpportunitiesExtra: e.target.value })}
-              />
-            </div>
-
-            {/* Q5: State measures */}
-            <div className="space-y-3">
-              <label className="form-label flex items-center gap-2">
-                <Handshake className="w-4 h-4 text-blue-600" /> 5. ¿Crees que el estado realiza suficientes medidas para facilitar la integración a los migrantes?
+                <Handshake className="w-4 h-4 text-blue-600" /> 4. ¿Crees que el estado realiza suficientes medidas para facilitar la integración a los migrantes?
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {YES_NO_UNSURE.map((val) => (
@@ -369,40 +325,10 @@ export default function App() {
               />
             </div>
 
-            {/* Q6: Taboo */}
+            {/* Q5: Visibility experiences */}
             <div className="space-y-3">
               <label className="form-label flex items-center gap-2">
-                <MessageCircle className="w-4 h-4 text-amber-500" /> 6. ¿Crees que ser migrante es un tema tabú o incómodo por algún motivo?
-              </label>
-              <div className="grid grid-cols-2 gap-3">
-                {YES_NO.map((val) => (
-                  <button
-                    key={val}
-                    type="button"
-                    onClick={() => setFormData({ ...formData, immigrantTaboo: val })}
-                    className={cn(
-                      "px-3 py-3 rounded-xl text-sm font-sans font-medium transition-all border",
-                      formData.immigrantTaboo === val 
-                        ? "bg-amber-500 text-white border-amber-500 shadow-md shadow-amber-500/20" 
-                        : "bg-white text-gray-700 border-gray-200 hover:border-gray-400"
-                    )}
-                  >
-                    {val}
-                  </button>
-                ))}
-              </div>
-              <textarea
-                className="form-input text-sm mt-2 resize-none h-20 placeholder:text-gray-400"
-                placeholder="Información adicional (opcional)"
-                value={formData.immigrantTabooExtra}
-                onChange={(e) => setFormData({ ...formData, immigrantTabooExtra: e.target.value })}
-              />
-            </div>
-
-            {/* Q7: Visibility experiences */}
-            <div className="space-y-3">
-              <label className="form-label flex items-center gap-2">
-                <Eye className="w-4 h-4 text-pink-500" /> 7. ¿Pensás que son necesarias más experiencias como esta para darle mayor visibilidad a la migración y los migrantes?
+                <Eye className="w-4 h-4 text-pink-500" /> 5. ¿Pensás que son necesarias más experiencias como esta para darle mayor visibilidad a la migración y los migrantes?
               </label>
               <div className="grid grid-cols-2 gap-3">
                 {YES_NO.map((val) => (
@@ -426,36 +352,6 @@ export default function App() {
                 placeholder="Información adicional (opcional)"
                 value={formData.needVisibilityExtra}
                 onChange={(e) => setFormData({ ...formData, needVisibilityExtra: e.target.value })}
-              />
-            </div>
-
-            {/* Q8: Plans to migrate */}
-            <div className="space-y-3">
-              <label className="form-label flex items-center gap-2">
-                <Plane className="w-4 h-4 text-teal-600" /> 8. ¿Pensás en migrar del país en algún futuro?
-              </label>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                {YES_NO_UNSURE.map((val) => (
-                  <button
-                    key={val}
-                    type="button"
-                    onClick={() => setFormData({ ...formData, plansToMigrate: val })}
-                    className={cn(
-                      "px-3 py-3 rounded-xl text-sm font-sans font-medium transition-all border",
-                      formData.plansToMigrate === val 
-                        ? "bg-teal-600 text-white border-teal-600 shadow-md shadow-teal-500/20" 
-                        : "bg-white text-gray-700 border-gray-200 hover:border-gray-400"
-                    )}
-                  >
-                    {val}
-                  </button>
-                ))}
-              </div>
-              <textarea
-                className="form-input text-sm mt-2 resize-none h-20 placeholder:text-gray-400"
-                placeholder="Información adicional (opcional)"
-                value={formData.plansToMigrateExtra}
-                onChange={(e) => setFormData({ ...formData, plansToMigrateExtra: e.target.value })}
               />
             </div>
 
