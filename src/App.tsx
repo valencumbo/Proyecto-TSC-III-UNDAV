@@ -121,13 +121,14 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen pb-20 relative">
+    <div className="min-h-screen pb-20 relative overflow-hidden bg-slate-50">
       {/* Background decorations */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-100/50 blur-[120px] mix-blend-multiply pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-rose-100/50 blur-[120px] mix-blend-multiply pointer-events-none" />
+      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-400/20 blur-[120px] mix-blend-multiply pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-rose-400/20 blur-[120px] mix-blend-multiply pointer-events-none" />
+      <div className="absolute top-[40%] right-[10%] w-[30%] h-[30%] rounded-full bg-purple-400/20 blur-[120px] mix-blend-multiply pointer-events-none" />
       
       {/* Header */}
-      <header className="bg-white/70 backdrop-blur-lg border-b border-white/50 py-4 px-4 sticky top-0 z-50 shadow-sm">
+      <header className="bg-white/60 backdrop-blur-xl border-b border-white/80 py-5 px-4 sticky top-0 z-50 shadow-[0_4px_30px_rgba(0,0,0,0.03)]">
         <div className="max-w-xl mx-auto flex items-center justify-between gap-4">
           <div className="flex-1 flex justify-start">
             <div className="w-16 h-16 items-center justify-center flex overflow-hidden">
@@ -135,7 +136,7 @@ export default function App() {
             </div>
           </div>
           <div className="flex-[3] text-center">
-            <h1 className="text-xl font-bold font-serif leading-tight bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600">Red de Migrantes y Refugiadxs UNDAV</h1>
+            <h1 className="text-lg sm:text-xl font-extrabold font-sans tracking-tight leading-tight bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-600">Red de Migrantes y Refugiados UNDAV</h1>
           </div>
           <div className="flex-1 flex justify-end">
             <div className="w-16 h-16 items-center justify-center flex overflow-hidden">
