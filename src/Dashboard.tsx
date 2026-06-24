@@ -60,40 +60,114 @@ export default function Dashboard({ onBack }: { onBack: () => void }) {
   };
 
   const downloadPDF = () => {
-    const doc = new jsPDF('landscape');
+    const doc = new jsPDF('p', 'mm', 'a4');
     
-    const headers = [
-      'Fecha',
-      'Entrevistado',
-      'Nac. en Arg',
-      'Origen',
-      'Flia. Migrante',
-      'Dificultades',
-      'Estado',
-      'Visibilidad',
-      'Encuestador'
-    ];
-
-    const data = responses.map(r => [
-      r.createdAt && typeof r.createdAt.toDate === 'function' ? format(r.createdAt.toDate(), 'dd/MM/yy HH:mm') : '-',
-      r.intervieweeName || '-',
-      r.bornInArgentina,
-      r.countryOfOrigin || '-',
-      r.familyMigrated,
-      r.difficultiesLivingAbroad,
-      r.stateMeasures,
-      r.needVisibility,
-      r.interviewerName || '-'
-    ]);
-
-    doc.text('Resultados de Encuestas a Migrantes', 14, 15);
+    // Header Title
+    doc.setFontSize(16);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(30, 41, 59); // slate-800
+    doc.text('Resultados de Encuestas a Migrantes', 15, 18);
     
+    // Subtitle & Meta Info
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(100, 116, 139); // slate-500
+    const today = format(new Date(), 'dd/MM/yyyy HH:mm');
+    doc.text(`Total de encuestas registradas: ${responses.length}  |  Fecha de generación: ${today}`, 15, 24);
+    
+    // Separator line
+    doc.setDrawColor(226, 232, 240); // slate-200
+    doc.setLineWidth(0.5);
+    doc.line(15, 28, 195, 28);
+
+    // Build detailed layout for each survey
+    const data = responses.map((r, index) => {
+      const fecha = r.createdAt && typeof r.createdAt.toDate === 'function' 
+        ? format(r.createdAt.toDate(), 'dd/MM/yyyy HH:mm') 
+        : '-';
+      
+      const infoBasica = `Encuesta #${index + 1}\n\n` +
+                         `• Entrevistado:\n  ${r.intervieweeName || 'Anónimo'}\n\n` +
+                         `• Fecha/Hora:\n  ${fecha}\n\n` +
+                         `• Encuestador:\n  ${r.interviewerName || '-'}`;
+
+      let cuestionarioDetalle = '';
+      
+      // 1. Origen
+      cuestionarioDetalle += `1. ¿Naciste en Argentina?: ${r.bornInArgentina}`;
+      if (r.bornInArgentina === 'No' && r.countryOfOrigin) {
+        cuestionarioDetalle += ` (De: ${r.countryOfOrigin})`;
+      }
+      if (r.bornInArgentinaExtra) {
+        cuestionarioDetalle += `\n   ↳ Comentario: "${r.bornInArgentinaExtra.trim()}"`;
+      }
+      cuestionarioDetalle += `\n\n`;
+
+      // 2. Familiares Migrantes
+      cuestionarioDetalle += `2. ¿Tenés familiares o conocidos migrantes?: ${r.familyMigrated}`;
+      if (r.familyMigratedExtra) {
+        cuestionarioDetalle += `\n   ↳ Comentario: "${r.familyMigratedExtra.trim()}"`;
+      }
+      cuestionarioDetalle += `\n\n`;
+
+      // 3. Dificultades
+      cuestionarioDetalle += `3. ¿Hay dificultades para los migrantes en Argentina?: ${r.difficultiesLivingAbroad}`;
+      if (r.difficultiesLivingAbroadExtra) {
+        cuestionarioDetalle += `\n   ↳ Comentario: "${r.difficultiesLivingAbroadExtra.trim()}"`;
+      }
+      cuestionarioDetalle += `\n\n`;
+
+      // 4. Medidas del Estado
+      cuestionarioDetalle += `4. ¿El estado realiza suficientes medidas?: ${r.stateMeasures}`;
+      if (r.stateMeasuresExtra) {
+        cuestionarioDetalle += `\n   ↳ Comentario: "${r.stateMeasuresExtra.trim()}"`;
+      }
+      cuestionarioDetalle += `\n\n`;
+
+      // 5. Visibilidad
+      cuestionarioDetalle += `5. ¿Es necesario dar visibilidad a estas experiencias?: ${r.needVisibility}`;
+      if (r.needVisibilityExtra) {
+        cuestionarioDetalle += `\n   ↳ Comentario: "${r.needVisibilityExtra.trim()}"`;
+      }
+
+      return [infoBasica, cuestionarioDetalle];
+    });
+
     autoTable(doc, {
-      head: [headers],
+      head: [['Datos de la Encuesta', 'Respuestas y Comentarios Detallados']],
       body: data,
-      startY: 25,
-      styles: { fontSize: 8, cellPadding: 2 },
-      headStyles: { fillColor: [79, 70, 229] }, // indigo-600
+      startY: 34,
+      styles: { 
+        fontSize: 8.5, 
+        cellPadding: 5, 
+        valign: 'top', 
+        overflow: 'linebreak'
+      },
+      headStyles: { 
+        fillColor: [79, 70, 229], // indigo-600
+        textColor: [255, 255, 255],
+        fontStyle: 'bold',
+        fontSize: 9.5
+      },
+      columnStyles: {
+        0: { cellWidth: 45, fontStyle: 'bold' },
+        1: { cellWidth: 135 }
+      },
+      alternateRowStyles: {
+        fillColor: [248, 250, 252] // slate-50
+      },
+      margin: { top: 25, bottom: 20, left: 15, right: 15 },
+      didDrawPage: (data) => {
+        // Add footer with page numbering
+        doc.setFontSize(8);
+        doc.setTextColor(148, 163, 184); // slate-400
+        doc.text(
+          `Página ${data.pageNumber}`,
+          195,
+          285,
+          { align: 'right' }
+        );
+      }
     });
 
     doc.save('encuestas_migrantes.pdf');
