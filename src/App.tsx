@@ -25,8 +25,10 @@ import {
 import { cn } from './lib/utils';
 import redLogo from './red-Logo.png';
 import undavLogo from './undav-Logo.png';
+import Dashboard from './Dashboard';
 
 export default function App() {
+  const [viewMode, setViewMode] = useState<'form' | 'dashboard'>('form');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -49,7 +51,7 @@ export default function App() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.bornInArgentina) {
+    if (!formData.bornInArgentina || (formData.bornInArgentina === 'No' && !formData.countryOfOrigin) || !formData.familyMigrated || !formData.difficultiesLivingAbroad || !formData.stateMeasures || !formData.needVisibility) {
       setError('Por favor complete los campos obligatorios (*)');
       return;
     }
@@ -91,6 +93,10 @@ export default function App() {
     setIsSubmitted(false);
     setError(null);
   };
+
+  if (viewMode === 'dashboard') {
+    return <Dashboard onBack={() => setViewMode('form')} />;
+  }
 
   if (isSubmitted) {
     return (
@@ -239,7 +245,7 @@ export default function App() {
             {/* Q2: Family migrated */}
             <div className="space-y-3">
               <label className="form-label flex items-center gap-2">
-                <Users className="w-4 h-4 text-orange-500" /> 2. ¿Tenés familiares o conocidos cercanos que hayan inmigrado de otro país a argentina? ¿De dónde?
+                <Users className="w-4 h-4 text-orange-500" /> 2. ¿Tenés familiares o conocidos cercanos que hayan inmigrado de otro país a argentina? ¿De dónde? *
               </label>
               <div className="grid grid-cols-2 gap-3">
                 {YES_NO.map((val) => (
@@ -269,7 +275,7 @@ export default function App() {
             {/* Q3: Difficulties */}
             <div className="space-y-3">
               <label className="form-label flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 text-purple-500" /> 3. ¿Crees que son muchas las dificultades de vivir en argentina como extranjero?
+                <AlertCircle className="w-4 h-4 text-purple-500" /> 3. ¿Crees que son muchas las dificultades de vivir en argentina como extranjero? *
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {YES_NO_UNSURE.map((val) => (
@@ -299,7 +305,7 @@ export default function App() {
             {/* Q4: State measures */}
             <div className="space-y-3">
               <label className="form-label flex items-center gap-2">
-                <Handshake className="w-4 h-4 text-blue-600" /> 4. ¿Crees que el estado realiza suficientes medidas para facilitar la integración a los migrantes?
+                <Handshake className="w-4 h-4 text-blue-600" /> 4. ¿Crees que el estado realiza suficientes medidas para facilitar la integración a los migrantes? *
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {YES_NO_UNSURE.map((val) => (
@@ -329,7 +335,7 @@ export default function App() {
             {/* Q5: Visibility experiences */}
             <div className="space-y-3">
               <label className="form-label flex items-center gap-2">
-                <Eye className="w-4 h-4 text-pink-500" /> 5. ¿Pensás que son necesarias más experiencias como esta para darle mayor visibilidad a la migración y los migrantes?
+                <Eye className="w-4 h-4 text-pink-500" /> 5. ¿Pensás que son necesarias más experiencias como esta para darle mayor visibilidad a la migración y los migrantes? *
               </label>
               <div className="grid grid-cols-2 gap-3">
                 {YES_NO.map((val) => (
@@ -398,6 +404,13 @@ export default function App() {
         <div className="max-w-xl mx-auto flex flex-col items-center gap-2">
           <Heart className="w-5 h-5 text-[#5A5A40]" />
           <p className="text-xs font-sans uppercase tracking-[0.2em]">En solidaridad construimos derechos</p>
+          <button 
+            type="button" 
+            onClick={() => setViewMode('dashboard')}
+            className="mt-4 text-xs font-sans hover:underline flex items-center gap-1 opacity-50 hover:opacity-100 transition-opacity"
+          >
+            Ver Resultados
+          </button>
         </div>
       </footer>
     </div>
