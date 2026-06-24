@@ -87,9 +87,9 @@ export default function Dashboard({ onBack }: { onBack: () => void }) {
         : '-';
       
       const infoBasica = `Encuesta #${index + 1}\n\n` +
-                         `• Entrevistado:\n  ${r.intervieweeName || 'Anónimo'}\n\n` +
-                         `• Fecha/Hora:\n  ${fecha}\n\n` +
-                         `• Encuestador:\n  ${r.interviewerName || '-'}`;
+                         `- Entrevistado:\n  ${r.intervieweeName || 'Anónimo'}\n\n` +
+                         `- Fecha/Hora:\n  ${fecha}\n\n` +
+                         `- Encuestador:\n  ${r.interviewerName || '-'}`;
 
       let cuestionarioDetalle = '';
       
@@ -99,35 +99,35 @@ export default function Dashboard({ onBack }: { onBack: () => void }) {
         cuestionarioDetalle += ` (De: ${r.countryOfOrigin})`;
       }
       if (r.bornInArgentinaExtra) {
-        cuestionarioDetalle += `\n   ↳ Comentario: "${r.bornInArgentinaExtra.trim()}"`;
+        cuestionarioDetalle += `\n   Comentario: "${r.bornInArgentinaExtra.trim()}"`;
       }
       cuestionarioDetalle += `\n\n`;
 
       // 2. Familiares Migrantes
       cuestionarioDetalle += `2. ¿Tenés familiares o conocidos migrantes?: ${r.familyMigrated}`;
       if (r.familyMigratedExtra) {
-        cuestionarioDetalle += `\n   ↳ Comentario: "${r.familyMigratedExtra.trim()}"`;
+        cuestionarioDetalle += `\n   Comentario: "${r.familyMigratedExtra.trim()}"`;
       }
       cuestionarioDetalle += `\n\n`;
 
       // 3. Dificultades
       cuestionarioDetalle += `3. ¿Hay dificultades para los migrantes en Argentina?: ${r.difficultiesLivingAbroad}`;
       if (r.difficultiesLivingAbroadExtra) {
-        cuestionarioDetalle += `\n   ↳ Comentario: "${r.difficultiesLivingAbroadExtra.trim()}"`;
+        cuestionarioDetalle += `\n   Comentario: "${r.difficultiesLivingAbroadExtra.trim()}"`;
       }
       cuestionarioDetalle += `\n\n`;
 
       // 4. Medidas del Estado
       cuestionarioDetalle += `4. ¿El estado realiza suficientes medidas?: ${r.stateMeasures}`;
       if (r.stateMeasuresExtra) {
-        cuestionarioDetalle += `\n   ↳ Comentario: "${r.stateMeasuresExtra.trim()}"`;
+        cuestionarioDetalle += `\n   Comentario: "${r.stateMeasuresExtra.trim()}"`;
       }
       cuestionarioDetalle += `\n\n`;
 
       // 5. Visibilidad
       cuestionarioDetalle += `5. ¿Es necesario dar visibilidad a estas experiencias?: ${r.needVisibility}`;
       if (r.needVisibilityExtra) {
-        cuestionarioDetalle += `\n   ↳ Comentario: "${r.needVisibilityExtra.trim()}"`;
+        cuestionarioDetalle += `\n   Comentario: "${r.needVisibilityExtra.trim()}"`;
       }
 
       return [infoBasica, cuestionarioDetalle];
