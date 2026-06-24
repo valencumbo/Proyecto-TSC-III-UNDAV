@@ -198,7 +198,133 @@ export default function Dashboard({ onBack }: { onBack: () => void }) {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 mt-8">
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        
+        {/* Mobile View: Cards */}
+        <div className="md:hidden space-y-4">
+          {responses.map((response) => (
+            <div key={response.id} className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+              <div 
+                className="p-4 flex items-center justify-between cursor-pointer hover:bg-slate-50 transition-colors"
+                onClick={() => toggleRow(response.id)}
+              >
+                <div>
+                  <div className="font-semibold text-slate-800 text-sm mb-1">{response.intervieweeName || 'Anónimo'}</div>
+                  <div className="text-xs text-slate-500">
+                    {response.createdAt && typeof response.createdAt.toDate === 'function' ? format(response.createdAt.toDate(), 'dd/MM/yy HH:mm') : '-'}
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className={`inline-flex px-2 py-1 rounded-md text-xs font-medium ${response.bornInArgentina === 'Sí' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}`}>
+                    {response.bornInArgentina === 'Sí' ? 'Arg' : (response.countryOfOrigin || 'Extranjero')}
+                  </span>
+                  {expandedRows.has(response.id) ? (
+                    <ChevronUp className="w-5 h-5 text-slate-400" />
+                  ) : (
+                    <ChevronDown className="w-5 h-5 text-slate-400" />
+                  )}
+                </div>
+              </div>
+              
+              {expandedRows.has(response.id) && (
+                <div className="border-t border-slate-100 bg-slate-50/50 p-4 space-y-4">
+                  <div className="bg-white p-3 rounded-xl border border-slate-200">
+                    <h5 className="font-semibold text-slate-800 mb-2 text-sm">1. Origen y Nacionalidad</h5>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between items-start">
+                        <span className="text-slate-500 w-1/3">¿Naciste en Argentina?</span>
+                        <span className="font-medium text-slate-800 w-2/3">{response.bornInArgentina}</span>
+                      </div>
+                      {response.bornInArgentina === 'No' && (
+                        <div className="flex justify-between items-start">
+                          <span className="text-slate-500 w-1/3">¿De dónde sos?</span>
+                          <span className="font-medium text-slate-800 w-2/3 break-words">{response.countryOfOrigin || '-'}</span>
+                        </div>
+                      )}
+                      {response.bornInArgentinaExtra && (
+                        <div className="bg-slate-50 p-2 rounded-lg border border-slate-100 whitespace-pre-wrap break-words mt-2">
+                          <span className="block text-xs font-semibold text-slate-500 uppercase mb-1 flex items-center gap-1"><MessageSquare className="w-3 h-3"/> Extra</span>
+                          {response.bornInArgentinaExtra}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="bg-white p-3 rounded-xl border border-slate-200">
+                    <h5 className="font-semibold text-slate-800 mb-2 text-sm">2. Familiares Migrantes</h5>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between items-start">
+                        <span className="text-slate-500 w-1/3">¿Tenés familiares migrantes?</span>
+                        <span className="font-medium text-slate-800 w-2/3">{response.familyMigrated}</span>
+                      </div>
+                      {response.familyMigratedExtra && (
+                        <div className="bg-slate-50 p-2 rounded-lg border border-slate-100 whitespace-pre-wrap break-words mt-2">
+                          <span className="block text-xs font-semibold text-slate-500 uppercase mb-1 flex items-center gap-1"><MessageSquare className="w-3 h-3"/> Extra</span>
+                          {response.familyMigratedExtra}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="bg-white p-3 rounded-xl border border-slate-200">
+                    <h5 className="font-semibold text-slate-800 mb-2 text-sm">3. Dificultades</h5>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between items-start">
+                        <span className="text-slate-500 w-1/3">¿Dificultades en Arg?</span>
+                        <span className="font-medium text-slate-800 w-2/3">{response.difficultiesLivingAbroad}</span>
+                      </div>
+                      {response.difficultiesLivingAbroadExtra && (
+                        <div className="bg-slate-50 p-2 rounded-lg border border-slate-100 whitespace-pre-wrap break-words mt-2">
+                          <span className="block text-xs font-semibold text-slate-500 uppercase mb-1 flex items-center gap-1"><MessageSquare className="w-3 h-3"/> Extra</span>
+                          {response.difficultiesLivingAbroadExtra}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="bg-white p-3 rounded-xl border border-slate-200">
+                    <h5 className="font-semibold text-slate-800 mb-2 text-sm">4. Medidas del Estado</h5>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between items-start">
+                        <span className="text-slate-500 w-1/3">¿Medidas suficientes?</span>
+                        <span className="font-medium text-slate-800 w-2/3">{response.stateMeasures}</span>
+                      </div>
+                      {response.stateMeasuresExtra && (
+                        <div className="bg-slate-50 p-2 rounded-lg border border-slate-100 whitespace-pre-wrap break-words mt-2">
+                          <span className="block text-xs font-semibold text-slate-500 uppercase mb-1 flex items-center gap-1"><MessageSquare className="w-3 h-3"/> Extra</span>
+                          {response.stateMeasuresExtra}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="bg-white p-3 rounded-xl border border-slate-200">
+                    <h5 className="font-semibold text-slate-800 mb-2 text-sm">5. Visibilidad</h5>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between items-start">
+                        <span className="text-slate-500 w-1/3">¿Son necesarias?</span>
+                        <span className="font-medium text-slate-800 w-2/3">{response.needVisibility}</span>
+                      </div>
+                      {response.needVisibilityExtra && (
+                        <div className="bg-slate-50 p-2 rounded-lg border border-slate-100 whitespace-pre-wrap break-words mt-2">
+                          <span className="block text-xs font-semibold text-slate-500 uppercase mb-1 flex items-center gap-1"><MessageSquare className="w-3 h-3"/> Extra</span>
+                          {response.needVisibilityExtra}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+          {responses.length === 0 && (
+            <div className="text-center p-8 text-slate-500 bg-white rounded-2xl border border-slate-200">
+              Aún no hay encuestas registradas.
+            </div>
+          )}
+        </div>
+
+        {/* Desktop View: Table */}
+        <div className="hidden md:block bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse min-w-[1000px]">
               <thead>
